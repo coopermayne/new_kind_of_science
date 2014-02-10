@@ -1,4 +1,6 @@
 NewScience::Application.routes.draw do
+  get '/json' => "patterns#index"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
