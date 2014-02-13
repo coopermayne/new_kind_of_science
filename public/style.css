@@ -1,0 +1,42 @@
+body {
+  background-color: black;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  height: 100%;
+  position: relative;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.circle {
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  position: absolute;
+}
+.circle.center {
+  left:0;
+  right:0;
+  margin: 0 auto;
+  background-color: white;
+  z-index: 5;
+}
+
+#menu {
+  background:red;
+}
+#menu ul {
+
+}
+#menu ul li {
+  display: inline;
+}
+/*.circle.left {*/
+  /*left:0px;*/
+  /*background-color: grey;*/
+/*}*/
+/*.circle.right {*/
+  /*right:0px;*/
+  /*background-color: grey;*/
+/*}*/
