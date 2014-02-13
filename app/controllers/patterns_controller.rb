@@ -6,11 +6,12 @@ class PatternsController < ApplicationController
     # 3 shades: 6,561
     # 4 shades: 65,536
 
-    grid = []
-    rows = params['height'].to_i
-    cols = params['width'].to_i
+    depth = params['depth'].to_i + (params['depth'].to_i%2-1).abs #make sure its odd...
+    rows = depth
+    cols = depth*2+1 #add equale numbers of cells on each side of middle....
+    grid = Array.new(rows){ Array.new(cols) { 0 } }
 
-    filename = "images/#{cols}_#{rows}.png"
+    filename = "#{cols}_#{rows}.png"
 
     def determine_color(grid, row_index, col_index) 
       previous_row = grid[row_index-1]
@@ -23,7 +24,7 @@ class PatternsController < ApplicationController
       when [1,0,1]
         return 1
       when [1,0,0] 
-        return 0   #this one is cool 0 or 1
+        return 1   #this one is cool 0 or 1
       when [0,1,1]
         return 1  #make a sideways fractal
       when [0,1,0]
@@ -37,24 +38,25 @@ class PatternsController < ApplicationController
       end
     end
 
-    grid = Array.new(rows){ Array.new(cols) { 0 } }
+    #set the seed... 
+    initialIndex = depth
+    grid[0][(initialIndex)] = 1
 
-    grid[0][(rows-1)/2] = 1
-    #added complexity
-    #grid[0][(rows-1)/2+20] = 1
-    #grid[0][(rows-1)/2+38] = 1
-    #grid[0][(rows-1)/2+61] = 1
-    #grid[0][(rows-1)] = 1
-
-    grid.each_with_index do |row, row_index|  
-      next if row_index==0   #(skip the first row....)
-
-      #determine colors for each row. 
-      row.each_with_index do |col, col_index| 
-        next if col_index==0 || col_index==cols-1  #skip first and last col
-        grid[row_index][col_index] = determine_color(grid, row_index, col_index)
+    depth.times do |t|
+      puts t
+      next if t == 0  #dont need to investigate the first t
+      (initialIndex-t..initialIndex+t).each do |col|  #only investigate within possible range
+        grid[t][col] = determine_color(grid, t, col)
       end
     end
+
+    #slice off edges
+    grid.map! do |row|
+      row[(depth+1)/2..-(depth+3)/2]
+    end  
+
+    cols = depth
+    rows = depth
 
     img = Magick::Image.new(cols,rows)
 
@@ -75,11 +77,12 @@ class PatternsController < ApplicationController
       img.store_pixels(0, y, cols, 1, pixels)
     }
 
-    img = img.scale(5)
+    img_small = img.scale(2)
+    img_large = img.scale(3)
+    img_small.write("public/images/small_#{filename}")
+    img_large.write("public/images/large_#{filename}")
 
-    img.write("public/" + filename)
-
-    render :text => filename
+    render :json => {small: "images/small_#{filename}", large: "images/large_#{filename}" }
 
   end
 end

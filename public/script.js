@@ -3,27 +3,31 @@ var json;
 //
 $(document).ready(function() {
   setHandlers()
+  
 });
 
 function setHandlers () {
 
   $('form').on('submit', function(e) {
     e.preventDefault();
-    width = $('input[name=width]')[0].value
-    height = $('input[name=height]')[0].value
-    fetchDataAndDisplay(width,height);
+    depth = $('input[name=depth]')[0].value
+    fetchDataAndDisplay(depth);
   })
 }
 
-function fetchDataAndDisplay(width, height) {
+function fetchDataAndDisplay(depth) {
   console.log('fetching data');
   $.ajax({
-    url: "http://localhost:3000/json?" + "height=" + height + "&width=" + width
+    url: "http://localhost:3000/json?" + "depth=" + depth
   }).done(function(data) {
     console.log('building graphic');
-    $('#generated').html("<img src='" + data + "'>")
-    //display(data);
-    //displayPng(data)
+    $('#generated').html(  "<img id='zoomy' src='"+data['small']+"' data-zoom-image='"+data['large']+"'/>" )
+
+    $("#zoomy").elevateZoom({
+      zoomType : "lens",
+      lensShape : "round",
+      lensSize : 200
+    });
   });
 }
 
