@@ -5,6 +5,21 @@ $(document).ready(function() {
 });
 
 function setHandlers () {
+
+  $('input[type=range]').on("change", function(e) { 
+    $('input#dummy').val ($('input[type=range]')[0].value)
+    //e.preventDefault();
+  })
+
+  $('button#star').on('click', function(e) {
+    $.ajax({
+      url: "http://localhost:3000/star?" + params
+    }).done(function(data) {
+      alert('starred!');
+    });
+    e.preventDefault();
+  })
+
   $('form').on('submit', function(e) {
     params = $('form').serialize();
     fetchImgAndDisplay(params);
@@ -31,9 +46,6 @@ function fetchImgAndDisplay(params) {
     $('#generated').html(  "<img id='zoomy' src='"+data['small']+"' data-zoom-image='"+data['large']+"'/>" )
 
     $("#zoomy").elevateZoom({
-      zoomType : "lens",
-      lensShape : "round",
-      lensSize : 200
     });
   });
 }

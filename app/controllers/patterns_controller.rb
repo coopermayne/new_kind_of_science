@@ -18,7 +18,7 @@ class PatternsController < ApplicationController
       return rules.include?('R6') ? 1 : 0
     when [0,0,1]
       return rules.include?('R7') ? 1 : 0
-    when [0,0,0]
+    when [0,0,0] #this rule!... messes up my optimization
       return rules.include?('R8') ? 1 : 0 
     else
       return 0
@@ -26,7 +26,6 @@ class PatternsController < ApplicationController
   end
 
   def img
-
     all_rules = %w(R1 R2 R3 R4 R5 R6 R7 R8)
     rules = params.keys & all_rules
 
