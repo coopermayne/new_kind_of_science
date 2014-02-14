@@ -1,5 +1,6 @@
 NewScience::Application.routes.draw do
-  get '/json' => "patterns#index"
+  get '/img' => "patterns#img"
+  get '/svg' => "patterns#svg"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

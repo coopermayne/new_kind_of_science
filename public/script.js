@@ -1,24 +1,31 @@
-//make a grid of arbitrary dimentions fill the screen
 var json;
 //
 $(document).ready(function() {
   setHandlers()
-  
 });
 
 function setHandlers () {
-
   $('form').on('submit', function(e) {
+    params = $('form').serialize();
+    fetchImgAndDisplay(params);
     e.preventDefault();
-    depth = $('input[name=depth]')[0].value
-    fetchDataAndDisplay(depth);
   })
 }
 
-function fetchDataAndDisplay(depth) {
+function fetchSVGAndDisplay (depth) {
   console.log('fetching data');
   $.ajax({
-    url: "http://localhost:3000/json?" + "depth=" + depth
+    url: "http://localhost:3000/svg?" + "depth=" + depth
+  }).done(function(data) {
+    console.log('done');
+    $('#generated').html(data['source']);
+  });
+}
+
+function fetchImgAndDisplay(params) {
+  console.log('fetching data');
+  $.ajax({
+    url: "http://localhost:3000/img?" + params
   }).done(function(data) {
     console.log('building graphic');
     $('#generated').html(  "<img id='zoomy' src='"+data['small']+"' data-zoom-image='"+data['large']+"'/>" )
@@ -31,63 +38,62 @@ function fetchDataAndDisplay(depth) {
   });
 }
 
-function displayPng (json) {
-  var rows = json.length
-  var cols = json[0].length
-  js = json;
+//function displayPng (json) {
+  //var rows = json.length
+  //var cols = json[0].length
+  //js = json;
 
-  Caman.Filter.register("science", function () {
+  //Caman.Filter.register("science", function () {
 
-    // Our process function that will be called for each pixel.
-    // Note that we pass the name of the filter as the first argument.
+    //// Our process function that will be called for each pixel.
+    //// Note that we pass the name of the filter as the first argument.
 
-    this.process("science", function (rgba) {
+    //this.process("science", function (rgba) {
 
 
-      xCoord = this.locationXY().x
-      yCoord = 501-this.locationXY().y
+      //xCoord = this.locationXY().x
+      //yCoord = 501-this.locationXY().y
 
-      if(js[yCoord][xCoord] == 1){
-        rgba.r = 0
-        rgba.g = 0
-        rgba.b = 0
-      }
+      //if(js[yCoord][xCoord] == 1){
+        //rgba.r = 0
+        //rgba.g = 0
+        //rgba.b = 0
+      //}
 
-      // Return the modified RGB values
-      return rgba;
-    });
-  });
+      //// Return the modified RGB values
+      //return rgba;
+    //});
+  //});
   
-  Caman("#canvas", "501.png", function () {
-    // manipulate image here
-    this.science();
-    this.render();
-  });
+  //Caman("#canvas", "501.png", function () {
+    //// manipulate image here
+    //this.science();
+    //this.render();
+  //});
+//};
 
-};
+//function display (json) {
+  //var rows = json.length
+  //var cols = json[0].length
+  //var height = $(document).height() - 30;
+  //var box_length = height/rows;
+  //$('head').append('<style>.box{width:'+box_length+'px;height:'+box_length+'px;background-color:grey;}</style>')
 
-function display (json) {
-  var rows = json.length
-  var cols = json[0].length
-  var height = $(document).height() - 30;
-  var box_length = height/rows;
-  $('head').append('<style>.box{width:'+box_length+'px;height:'+box_length+'px;background-color:grey;}</style>')
-
-  //make a big html string and add it all at once....
+  ////make a big html string and add it all at once....
   
-  var inside = "";
+  //var inside = "";
 
-  for (var i = 0; i < json.length; i++) {
-    var inner = "";
-    for (var j = 0; j < json[i].length; j++) {
-      if (json[i][j]==1) {
-        var bg = 'style="background-color:black"';
-      }else{
-        var bg = "";
-      };
-      inner = inner.concat('<td class="box"'+ bg +'></td>')
-    };
-    inside = inside.concat('<tr>' + inner + '</tr>');
-  };
-  $('body').append('<table>'+inside+'</table>');
-};
+  //for (var i = 0; i < json.length; i++) {
+    //var inner = "";
+    //for (var j = 0; j < json[i].length; j++) {
+      //if (json[i][j]==1) {
+        //var bg = 'style="background-color:black"';
+      //}else{
+        //var bg = "";
+      //};
+      //inner = inner.concat('<td class="box"'+ bg +'></td>')
+    //};
+    //inside = inside.concat('<tr>' + inner + '</tr>');
+  //};
+  //$('body').append('<table>'+inside+'</table>');
+//};
