@@ -3,6 +3,11 @@ class PatternsController < ApplicationController
   def determine_color(grid, rules, row_index, col_index) 
     previous_row = grid[row_index-1]
     parents = previous_row[col_index-1,3]
+
+    # cool combos - 0,0,0,1,1,1,1,0
+    #             - 0,1,1,1,1,1,0,0
+    #             - 0,0,0,1,1,1,0,0
+
     case parents
     when [1,1,1]
       return rules.include?('R1') ? 1 : 0 #TOGGLE BORING/FUN
@@ -67,7 +72,7 @@ class PatternsController < ApplicationController
           p.green = 0
           p.blue = 0
         else
-          n = 65535/3
+          n = 65535/1.5
           p.red = n
           p.green = n
           p.blue = n
@@ -94,10 +99,22 @@ class PatternsController < ApplicationController
   end
 
   def svg
-    img = Rasem::SVGImage.new(100,100) do
-      circle 20, 20, 5
-      circle 50, 50, 5
-      line 20, 20, 50, 50
+
+    def turtle(dist, current_angle, angle, inc, segments)
+
+      return if segments < 1 #base case
+      
+      #recursive turtle graphic
+      d = dist * (0.6*500)
+      line 250, 250, 500, 500
+      #d*Math.cos(angle)
+      #d*Math.sin(angle)
+      #turtle(dist+inc, current_angle+angle, angle, inc, segments-1)
+    end
+
+    img = Rasem::SVGImage.new(500,500) do
+      line 250, 250, 500, 500
+      turtle(0.01, 0, 89.5, 0.01, 185)
     end
 
     render :json => {source: img.output}

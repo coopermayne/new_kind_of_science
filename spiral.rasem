@@ -1,0 +1,94 @@
+require 'pry'
+x = 500
+y = 500
+
+#dragon new approach
+
+def generate_dragon_series(depth)
+  string = "R"
+end
+
+#puts generate_dragon_series(2)
+
+#dragon
+#i_p1 = {x: x/4, y:y/2}
+#i_p2 = {x: x - x/4, y:y/2}
+
+#init_points = [i_p1,i_p2]  #we will add a bunch of segments to this array and draw them all at once
+##line init_points.first[:x], init_points.first[:y], init_points.last[:x], init_points.last[:y]
+
+#iterations = 15
+
+#def split_points(p1,p2, right = true)
+  #theta = Math.atan((p1[:y]-p2[:y])/ ( p1[:x]-p2[:x] ))
+  #d = Math.sqrt(( p1[:y]-p2[:y] )**2 + ( p1[:x]-p2[:x] )**2)
+
+  #dir = right ? 1 : -1
+  #line_theta = theta + (Math::PI/4)*dir
+
+  #new_point = {}
+  #new_point[:x] = ( d/Math.sqrt(2) )*Math.cos(line_theta) + p1[:x]
+  #new_point[:y] = ( d/Math.sqrt(2) )*Math.sin(line_theta) + p1[:y]
+
+  #return [new_point,p2]
+#end
+
+#def draw_through(array_of_points)
+  #array_of_points.each_with_index do |point, i|
+    #next if i == 0
+    #line array_of_points[i-1][:x], array_of_points[i-1][:y], array_of_points[i][:x], array_of_points[i][:y] 
+  #end  
+#end
+
+#points = init_points
+#iterations.times do |t|
+  #puts t
+  #right = true #set starting direction
+  #new = []
+
+  #points.each_with_index do |point, i|
+    ##get the slope of the segment between point and next_point...
+    ##add or subtract 45deg from that angle and 
+    #if i == 0
+      #new.push point
+    #else
+      #new.concat(split_points(points[i-1], points[i], right))
+      #right = !right #alternate direction
+    #end
+  #end
+
+  #points = new
+#end
+
+#set_width x
+#set_height y
+#draw_through(points)
+
+#turtle
+segments = 1
+d_angle = (Math::PI/2 - 0.01)
+distance = 1
+increment = 1
+
+set_width x
+set_height y
+
+point = {x: x/2, y: y/2}
+new_point = {}
+angle=0
+
+segments.times do |t|
+  angle = angle + d_angle
+  distance = distance + increment
+
+  #find the next point
+  new_point[:x] = point[:x] + distance*Math.cos(angle)
+  new_point[:y] = point[:y] + distance*Math.sin(angle)
+
+  #draw line to next point
+  line point[:x], point[:y], new_point[:x], new_point[:y], :stroke=> 'black', :stroke_width=>1
+  #prepare for next iteration by pointing point at new point
+  point[:x] = new_point[:x]
+  point[:y] = new_point[:y]
+
+end

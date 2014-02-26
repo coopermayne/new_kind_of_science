@@ -5,7 +5,6 @@ $(document).ready(function() {
 });
 
 function setHandlers () {
-
   $('input[type=range]').on("change", function(e) { 
     $('input#dummy').val ($('input[type=range]')[0].value)
     //e.preventDefault();
@@ -23,14 +22,15 @@ function setHandlers () {
   $('form').on('submit', function(e) {
     params = $('form').serialize();
     fetchImgAndDisplay(params);
+    //fetchSVGAndDisplay();
     e.preventDefault();
   })
 }
 
-function fetchSVGAndDisplay (depth) {
+function fetchSVGAndDisplay () {
   console.log('fetching data');
   $.ajax({
-    url: "http://localhost:3000/svg?" + "depth=" + depth
+    url: "http://localhost:3000/svg"
   }).done(function(data) {
     console.log('done');
     $('#generated').html(data['source']);
